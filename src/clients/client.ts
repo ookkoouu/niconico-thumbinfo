@@ -1,5 +1,7 @@
 import axios from "axios"
 import { parse as parseXml } from "fast-xml-parser"
+import { decode as htmlDecode } from "html-entities"
+
 import {
   ThumbInfo,
   Tag,
@@ -10,7 +12,6 @@ import {
   VideoLength,
   User,
 } from "../interfaces"
-import { decode as htmlDecode } from "html-entities"
 
 /**
  * '0' と '1' をbooleanにキャスト.
@@ -121,9 +122,25 @@ const getUser = (apiResponse: ThumbAPIResponseOk): User => {
 }
 
 /**
+ * 大きいサムネイル画像のurlを取得.
+ * 無ければ空文字.
+ */
+const getLargeThumbnail = async (thumbnailUrl: string): Promise<string> => {
+  const largeUrl = thumbnailUrl + ".L"
+  return await axios
+    .get(largeUrl)
+    .then(() => {
+      return largeUrl
+    })
+    .catch(() => {
+      return ""
+    })
+}
+
+/**
  * `Info`に詰め替え.
  */
-const pack = (response: ThumbAPIResponseOk): ThumbInfo => {
+const pack = async (response: ThumbAPIResponseOk): Promise<ThumbInfo> => {
   const tm = response.thumb
 
   const info: ThumbInfo = {
@@ -140,6 +157,7 @@ const pack = (response: ThumbAPIResponseOk): ThumbInfo => {
     no_live_play: castToBoolean(tm.no_live_play),
     tags: constructTag(tm.tags.tag),
     thumbnail: tm.thumbnail_url,
+    thumbnail_large: await getLargeThumbnail(tm.thumbnail_url),
     title: tm.title,
     uploaded: new Date(tm.first_retrieve),
     url: tm.watch_url,
@@ -154,7 +172,7 @@ const pack = (response: ThumbAPIResponseOk): ThumbInfo => {
  * @param thumb `fetch()`の結果.
  * @returns 動画があったらThumbInfo、無ければUnavailInfo.
  */
-const genInfo = (thumb: ThumbAPI): ThumbInfo | UnavailInfo => {
+const genInfo = async (thumb: ThumbAPI): Promise<ThumbInfo | UnavailInfo> => {
   try {
     if (thumb.nicovideo_thumb_response.status == "fail") {
       const unavail: UnavailInfo = {
@@ -167,7 +185,7 @@ const genInfo = (thumb: ThumbAPI): ThumbInfo | UnavailInfo => {
       return unavail
     }
 
-    const info: ThumbInfo = pack(thumb.nicovideo_thumb_response)
+    const info: ThumbInfo = await pack(thumb.nicovideo_thumb_response)
     return info
   } catch (error) {
     throw new Error("Failed to parse the API response.")
@@ -228,7 +246,7 @@ const GetThumbInfo = async (
     "http://ext.nicovideo.jp/api/getthumbinfo/" + videoId,
   )
 
-  const info = genInfo(result)
+  const info = await genInfo(result)
 
   return info
 }

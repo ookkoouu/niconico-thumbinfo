@@ -43,6 +43,7 @@ export interface ThumbInfo {
   no_live_play: boolean
   tags: Tag[]
   thumbnail: string
+  thumbnail_large: string
   title: string
   uploaded: Date
   url: string
