@@ -3,14 +3,14 @@ import { parse as parseXml } from "fast-xml-parser"
 import { decode as htmlDecode } from "html-entities"
 
 import {
-  ThumbInfo,
   Tag,
   ThumbAPI,
   ThumbAPIResponseOk,
   ThumbAPITag,
+  ThumbInfo,
   UnavailInfo,
-  VideoLength,
   User,
+  VideoLength,
 } from "../interfaces"
 
 /**
