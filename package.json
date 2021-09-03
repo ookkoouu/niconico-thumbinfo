@@ -8,7 +8,7 @@
     "dev": "node dist/test.js",
     "watch": "yarn tsc -w",
     "build": "yarn tsc",
-    "test": "yarn format && yarn lint:fix && yarn build",
+    "test": "yarn lint:fix && yarn build",
     "format": "prettier ./src ./test --write",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
