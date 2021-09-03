@@ -6,10 +6,10 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "node dist/test.js",
-    "watch": "yarn tsc -w",
-    "build": "yarn tsc",
-    "test": "yarn lint:fix && yarn build",
-    "format": "prettier ./src ./test --write",
+    "watch": "tsc -w",
+    "build": "tsc",
+    "test": "lint:fix && build",
+    "format": "prettier \"{src,test}/**/*\" --write",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
     "clean": "rimraf dist/*"
@@ -31,6 +31,7 @@
     "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-typescript-sort-keys": "^1.8.0",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",

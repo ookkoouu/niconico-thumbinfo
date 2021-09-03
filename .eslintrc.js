@@ -24,6 +24,7 @@ module.exports = {
   plugins: [
     "@typescript-eslint",
     "typescript-sort-keys",
+    "import",
     /* React
     "react-hooks",
     "react",
@@ -32,6 +33,13 @@ module.exports = {
   rules: {
     "typescript-sort-keys/interface": "error",
     "typescript-sort-keys/string-enum": "error",
+    "import/order": [
+      "warn",
+      {
+        "alphabetize": { "order": "asc" },
+        "newlines-between": "always",
+      }
+    ]
   },
   extends: [
     "eslint:recommended",
