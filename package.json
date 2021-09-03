@@ -1,0 +1,43 @@
+{
+  "name": "@ookkoouu/niconico-thumbinfo",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "node dist/test.js",
+    "watch": "yarn tsc -w",
+    "build": "yarn tsc",
+    "test": "yarn format && yarn lint:fix && yarn build",
+    "format": "prettier ./src ./test --write",
+    "lint": "eslint \"{src,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
+    "clean": "rimraf dist/*"
+  },
+  "author": "okou",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ookkoouu/niconico-thumbinfo"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "fast-xml-parser": "^3.19.0",
+    "html-entities": "^2.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.10",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-typescript-sort-keys": "^1.8.0",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.2"
+  },
+  "keywords": [
+    "niconico",
+    "typescript"
+  ]
+}
