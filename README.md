@@ -58,5 +58,5 @@ if (info.available) {
 */
 ```
 
-# Method
+# Interface
 GetThumbInfo (id: string): Promise<[ThumbInfo](https://github.com/ookkoouu/niconico-thumbinfo/blob/main/src/interfaces/Info.ts) | [UnavailInfo](https://github.com/ookkoouu/niconico-thumbinfo/blob/main/src/interfaces/Info.ts)>
