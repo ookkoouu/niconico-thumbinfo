@@ -45,5 +45,8 @@
   "keywords": [
     "niconico",
     "typescript"
+  ],
+  "files": [
+    "dist"
   ]
 }
