@@ -1,4 +1,4 @@
-name: PublishPackage
+name: Publish
 
 on:
   push:
@@ -19,6 +19,7 @@ jobs:
           cache: yarn
 
       - run: yarn install --frozen-lockfile
+      - run: lint:fix
       - run: yarn test
       - run: yarn build
 
@@ -27,11 +28,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - uses: actions/setup-node@v2
-        with:
-          registry-url: https://npm.pkg.github.com/
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     registry-url: https://npm.pkg.github.com/
 
-      - name: Publish to gpr
-        run: yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Publish to gpr
+      #   run: yarn publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
