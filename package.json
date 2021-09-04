@@ -1,6 +1,6 @@
 {
   "name": "niconico-thumbinfo",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A Niconico Video getthumbinfo API client.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
