@@ -19,7 +19,7 @@ jobs:
           cache: yarn
 
       - run: yarn install --frozen-lockfile
-      - run: lint:fix
+      - run: yarn lint:fix
       - run: yarn test
       - run: yarn build
 
