@@ -1,2 +1,2 @@
-import GetThumbInfo from "./clients/client"
-export default GetThumbInfo
+export * from "./clients/client"
+export * from "./interfaces"
