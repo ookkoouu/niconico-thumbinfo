@@ -26,11 +26,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.1",
+    "bent": "^7.3.12",
     "fast-xml-parser": "^3.19.0",
     "html-entities": "^2.3.2"
   },
   "devDependencies": {
+    "@types/bent": "^7.3.2",
     "@types/node": "^16.7.10",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
     "@typescript-eslint/parser": "^4.30.0",
