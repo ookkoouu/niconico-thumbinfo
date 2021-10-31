@@ -3,21 +3,19 @@ name: Test
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
-          cache: yarn
+          node-version: 16
+          cache: npm
 
-      - run: yarn install --frozen-lockfile
-      - run: yarn format
-      - run: yarn lint:fix
-      - run: yarn test
+      - run: npm ci
+      - run: npm run format
+      - run: npm run lint
+      - run: npm run test
