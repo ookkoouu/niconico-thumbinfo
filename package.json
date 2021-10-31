@@ -44,6 +44,8 @@
   },
   "keywords": [
     "niconico",
+    "nicovideo",
+    "api",
     "typescript"
   ],
   "files": [
