@@ -43,7 +43,7 @@ export interface ThumbInfo {
   mylists: number
   noLivePlay: boolean
   tags: Tag[]
-  thumbnail: string
+  thumbnailUrl: string
   title: string
   type: VideoType
   uploaded: Date
