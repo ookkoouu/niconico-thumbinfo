@@ -5,15 +5,13 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "node dist/test.js",
     "watch": "tsc -w",
     "build": "tsc",
-    "test": "yarn build",
+    "test": "",
     "format": "prettier \"{src,test}/**/*\" --write",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
-    "clean": "rimraf dist/*"
+    "clean": "rimraf dist"
   },
   "author": "okou",
   "repository": {
