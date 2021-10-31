@@ -18,19 +18,6 @@ export interface User {
   nickname: string
 }
 
-export type UnavailInfoType = "COMMUNITY" | "NOT_FOUND" | "DELETED"
-
-export interface UnavailInfo {
-  avalable: false
-  reason: {
-    code: UnavailInfoType
-    desctiption: string
-  }
-}
-
-/**
- * return type of module
- */
 export interface ThumbInfo {
   avalable: true
   comments: number

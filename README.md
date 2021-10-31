@@ -5,9 +5,9 @@ A Niconico Video getthumbinfo API client.
 # Usage
 
 ```ts
-import GetThumbInfo from "niconico-thumbinfo"
+import { getThumbInfo } from "niconico-thumbinfo"
 
-const info = await GetThumbInfo("sm9")
+const info = await getThumbInfo("sm9")
 
 if (info.available) {
   console.dir(info)
@@ -16,21 +16,20 @@ if (info.available) {
 /*
 {
   avalable: true,
-  category: '',
   comments: 5241184,
   description: 'レッツゴー！陰陽師（フルコーラスバージョン）',
   embeddable: true,
   genre: '未設定',
   id: 'sm9',
-  last_res_body: '遺影遺影遺影遺影遺影 食えるかぁ 食えるかぁぁ うううううううううう',
+  lastResBody: '( ﾟ∀ﾟ)o彡゜どーまん！ ﾟ∀ﾟ)o彡゜どーまん！ ﾟ∀ﾟ)o彡゜どーまん！ ﾟ∀ﾟ)o彡゜どーまん！ ( ﾟ∀ﾟ)...',
   length: {
-    string: '5:20',
-    hours: 0.08888888888888888,
-    minutes: 5.333333333333333,
+    text: '5:20',
+    hours: 0,
+    minutes: 5,
     seconds: 320
   },
   mylists: 180807,
-  no_live_play: false,
+  noLivePlay: false,
   tags: [
     { text: '陰陽師', locked: true },
     { text: 'レッツゴー！陰陽師', locked: true },
@@ -44,14 +43,15 @@ if (info.available) {
     { text: '全てはここから始まった', locked: false },
     { text: '伝説の始まり', locked: false }
   ],
-  thumbnail: 'http://nicovideo.cdn.nimg.jp/thumbnails/9/9',
+  thumbnailUrl: 'https://nicovideo.cdn.nimg.jp/thumbnails/9/9',
   title: '新・豪血寺一族 -煩悩解放 - レッツゴー！陰陽師',
+  type: 'flv',
   uploaded: 2007-03-05T15:33:00.000Z,
   url: 'https://www.nicovideo.jp/watch/sm9',
   user: {
     id: 4,
     nickname: '中の',
-    icon: 'https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/s/0/4.jpg?1271141672'
+    iconUrl: 'https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/s/0/4.jpg?271141672'
   },
   views: 20458394
 }
@@ -59,4 +59,5 @@ if (info.available) {
 ```
 
 # Interface
+
 GetThumbInfo (id: string): Promise<[ThumbInfo](https://github.com/ookkoouu/niconico-thumbinfo/blob/main/src/interfaces/Info.ts) | [UnavailInfo](https://github.com/ookkoouu/niconico-thumbinfo/blob/main/src/interfaces/Info.ts)>
