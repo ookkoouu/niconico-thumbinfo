@@ -4,7 +4,7 @@ export interface VideoLength {
   hours: number
   minutes: number
   seconds: number
-  string: string
+  text: string
 }
 
 export interface Tag {
@@ -13,15 +13,17 @@ export interface Tag {
 }
 
 export interface User {
-  icon: string
+  iconUrl: string
   id: number
   nickname: string
 }
 
+export type UnavailInfoType = "COMMUNITY" | "NOT_FOUND" | "DELETED"
+
 export interface UnavailInfo {
   avalable: false
   reason: {
-    code: "COMMUNITY" | "NOT_FOUND" | "DELETED"
+    code: UnavailInfoType
     desctiption: string
   }
 }
@@ -31,20 +33,19 @@ export interface UnavailInfo {
  */
 export interface ThumbInfo {
   avalable: true
-  category?: string
   comments: number
   description: string
   embeddable: boolean
   genre: string
   id: string
-  last_res_body: string
+  lastResBody: string
   length: VideoLength
   mylists: number
-  no_live_play: boolean
+  noLivePlay: boolean
   tags: Tag[]
-  thumbnail: string
-  thumbnail_large: string
+  thumbnailUrl: string
   title: string
+  type: VideoType
   uploaded: Date
   url: string
   user: User
