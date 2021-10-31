@@ -1,4 +1,4 @@
-import axios from "axios"
+import bent from "bent"
 import { parse as parseXml } from "fast-xml-parser"
 import { decode as htmlDecode } from "html-entities"
 
@@ -11,7 +11,7 @@ import {
   UnavailInfo,
   User,
   VideoLength,
-} from "../interfaces"
+} from "./interfaces"
 
 /**
  * '0' と '1' をbooleanにキャスト.
@@ -29,13 +29,14 @@ const getVideoLength = (length: string): VideoLength => {
     throw new Error("getVideoLength: Invalid arguments.")
   }
 
+  // TODO: hoursとminutesは小数点以下切り捨て
   const sec = Number(length.split(":")[0]) * 60 + Number(length.split(":")[1])
   const min = sec / 60
   const hor = sec / 60 / 60
   const str = `${Math.floor(min)}:${String(sec % 60).padStart(2, "0")}`
 
   return {
-    string: str,
+    text: str,
     hours: hor,
     minutes: min,
     seconds: sec,
@@ -46,6 +47,7 @@ const getVideoLength = (length: string): VideoLength => {
  * ThumbAPITagからカテゴリータグ名を取得.
  * カテゴリータグが無かったら空文字を返す.
  */
+// TODO: 消す
 const pickCategory = (thumbTags: ThumbAPITag | ThumbAPITag[]): string => {
   thumbTags = thumbTags ?? ""
   if (typeof thumbTags === "string" && thumbTags == "") return ""
@@ -64,7 +66,10 @@ const pickCategory = (thumbTags: ThumbAPITag | ThumbAPITag[]): string => {
  * 正しいタグobjectを生成.
  * タグが無い場合は空配列を返す.
  */
+// TODO: isCategoryを追加
+// TODO: 0.タグ無しを弾く, 1.引数が非配列なら配列にする, 2.配列要素がstringかobjectかで分岐
 const constructTag = (thumbTags: ThumbAPITag | ThumbAPITag[]): Tag[] => {
+  // TODO: s/??/||/
   thumbTags = thumbTags ?? ""
   if (typeof thumbTags === "string" && thumbTags == "") {
     // thumbTag=''
@@ -107,13 +112,13 @@ const getUser = (apiResponse: ThumbAPIResponseOk): User => {
     return {
       id: user_id,
       nickname: user_nickname,
-      icon: user_icon_url,
+      iconUrl: user_icon_url,
     }
   } else if (ch_id && ch_name && ch_icon_url) {
     return {
       id: ch_id,
       nickname: ch_name,
-      icon: ch_icon_url,
+      iconUrl: ch_icon_url,
     }
   } else {
     // user not exist
@@ -125,6 +130,7 @@ const getUser = (apiResponse: ThumbAPIResponseOk): User => {
  * 大きいサムネイル画像のurlを取得.
  * 無ければ空文字.
  */
+/*
 const getLargeThumbnail = async (thumbnailUrl: string): Promise<string> => {
   const largeUrl = thumbnailUrl + ".L"
   return await axios
@@ -135,30 +141,32 @@ const getLargeThumbnail = async (thumbnailUrl: string): Promise<string> => {
     .catch(() => {
       return ""
     })
-}
+}*/
 
 /**
  * `Info`に詰め替え.
  */
+// TODO: categoryとthumbnail_largeを削除
 const pack = async (response: ThumbAPIResponseOk): Promise<ThumbInfo> => {
   const tm = response.thumb
 
   const info: ThumbInfo = {
     avalable: true,
-    category: pickCategory(tm.tags.tag),
+    //category: pickCategory(tm.tags.tag),
     comments: tm.comment_num,
     description: tm.description,
     embeddable: castToBoolean(tm.embeddable),
     genre: tm.genre,
     id: tm.video_id,
-    last_res_body: tm.last_res_body,
+    lastResBody: tm.last_res_body,
     length: getVideoLength(tm.length),
     mylists: tm.mylist_counter,
-    no_live_play: castToBoolean(tm.no_live_play),
+    noLivePlay: castToBoolean(tm.no_live_play),
     tags: constructTag(tm.tags.tag),
     thumbnail: tm.thumbnail_url,
-    thumbnail_large: await getLargeThumbnail(tm.thumbnail_url),
+    //thumbnail_large: "",
     title: tm.title,
+    type: tm.movie_type,
     uploaded: new Date(tm.first_retrieve),
     url: tm.watch_url,
     user: getUser(response),
@@ -197,25 +205,24 @@ const genInfo = async (thumb: ThumbAPI): Promise<ThumbInfo | UnavailInfo> => {
  * @param url getthumbinfo request url.
  * @returns parsed API response object.
  */
+// TODO: 関数名を変える(callThumbAPIとか),
 const fetch = async (url: string): Promise<ThumbAPI> => {
+  const getString = bent("string")
+  // TODO: user-agentは消す
   const header = {
     "User-Agent": "niconico-thumbinfo",
   }
-  const response = await axios.get(url, { headers: header }).catch((err) => {
-    if (axios.isAxiosError(err) && err.response) {
-      // タイムアウト, 404, 501とか
-      throw new Error(`Niconico API ${err.message}`)
-    } else {
-      // その他内部エラー
-      throw new Error(`Connection failed with ${err}`)
-    }
+  const response = await getString(url).catch((err) => {
+    throw new Error(`Connection failed with ${err}`)
   })
+  /*
   if (response.status !== 200) {
     // 万が一 axiosがエラーを取りこぼした時
     throw new Error(`Invalid Response: ${response.statusText}`)
   }
+  */
 
-  const parsed: ThumbAPI = parseXml(response.data, {
+  const parsed: ThumbAPI = parseXml(response, {
     attributeNamePrefix: "",
     ignoreAttributes: false,
     textNodeName: "text",
@@ -230,6 +237,7 @@ const fetch = async (url: string): Promise<ThumbAPI> => {
  * @param videoId ニコニコの動画ID. (ex: sm9, so23335421)
  * @return 動画が見つかれば`ThumbInfo`, 無ければ`UnavailInfo`. 利用する前に`available`を判定すること.
  */
+// TODO: export const にする
 const GetThumbInfo = async (
   videoId: string,
 ): Promise<ThumbInfo | UnavailInfo> => {
@@ -242,8 +250,9 @@ const GetThumbInfo = async (
   const videoIdReg = /^(sm|so|nm|)\d+$/
   if (!videoIdReg.test(videoId)) throw new Error("Invalid Niconico video ID.")
 
+  // TODO: httpsにする
   const result = await fetch(
-    "http://ext.nicovideo.jp/api/getthumbinfo/" + videoId,
+    "https://ext.nicovideo.jp/api/getthumbinfo/" + videoId,
   )
 
   const info = await genInfo(result)
@@ -251,4 +260,5 @@ const GetThumbInfo = async (
   return info
 }
 
+// TODO: 消す
 export default GetThumbInfo
